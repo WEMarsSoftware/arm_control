@@ -1,45 +1,45 @@
 /**
  * Thank you to:
- * https://github.com/Kreezy-KRosa/ESP32IntTempSensorSoftAP/blob/master/ESP32internalTemp/ESP32internalTemp.ino
+ * Nuno Santos: https://techtutorialsx.com/2018/01/07/esp32-arduino-http-server-over-soft-ap/
+ * me-no-dev:   https://github.com/me-no-dev/ESPAsyncWebServer
  */
  
 #include <WiFi.h>
+#include "ESPAsyncWebServer.h"
 
 const char* ssid = "MY_ESP32_WIFI"; 
-const char* password = "password1"; // should be 8 characters or more 
+const char* password = "password1"; // MUST be 8 characters or more (will default to unsecured)
 String header;
 
-WiFiServer server(80);
-
+AsyncWebServer server(80);
 IPAddress staticIP(10,10,10,10);
-IPAddress gateway(10,10,10,1);      // setting the broadcast IP to 10.10.10.10
+IPAddress gateway(10,10,10,1);
 IPAddress subnet(255,255,255,0);  
 
-void setup() {
+String response = "Hello World!";
+
+void setup(){
   Serial.begin(115200);
+ 
   WiFi.softAP(ssid, password);
+
+  // can also set max number of connections
   WiFi.softAPConfig(staticIP, gateway, subnet);
+  
   Serial.println();
   Serial.print("IP Address:");
   Serial.println(WiFi.softAPIP());
-}
+  Serial.println(WiFi.localIP());
 
-void loop() {
-  // read from sensor here
-  
-   WiFiClient client = server.available();
-   
-   while(!client.available()){  delay(1); }
-   client.println("HTTP/1.1 200 OK");
-   client.println("Content-Type: text/html");
-   client.println("");
-   client.println("<!DOCTYPE HTML>");
-   client.println("<html>");
-   client.println("<head>");
-   client.println("<h1 style=""color:#ff0000"">");
-   client.println("ESP32 Temp:");
-   client.println("</h1>");
-   client.println("</head>");
-   client.println("</html>");
-   client.stop();                                  
+  // callback (if url is <staticIP>/hello)
+  server.on("/hello", HTTP_GET, [](AsyncWebServerRequest *request){
+    // read from a sensor here
+
+    // send response
+    request->send(200, "text/plain", response);
+  });
+ 
+  server.begin();
 }
+ 
+void loop(){}
