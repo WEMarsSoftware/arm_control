@@ -7,8 +7,8 @@
 #include <WiFi.h>
 
 // enter credentials here
-const char* ssid     = "";
-const char* password = "";
+const char* ssid     = "309";
+const char* password = "sisters11";
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -17,7 +17,7 @@ WiFiServer server(80);
 String header;
 
 void wifiReset() {
-    WiFi.persistent(true);
+    WiFi.persistent(false);
     WiFi.disconnect();
     WiFi.mode(WIFI_OFF);
     WiFi.mode(WIFI_STA);
@@ -33,13 +33,14 @@ void setup() {
   Serial.println(ssid);
   WiFi.enableSTA(true);
 
-  int status = WL_IDLE_STATUS;
+  delay(2000);
+  listNetworks();
+  delay(10000);
+  
+  int status = WiFi.begin(ssid, password);;
   while ( status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WEP network, SSID: ");
+    Serial.print("Attempting to connect to WAP network, SSID: ");
     Serial.println(ssid);
-    status = WiFi.begin(ssid, password);
-
-    // wait 10 seconds for connection:
     delay(10000);
   }
   
@@ -98,5 +99,30 @@ void loop(){
     client.stop();
     Serial.println("Client disconnected.");
     Serial.println("");
+  }
+}
+
+void listNetworks() {
+  // scan for nearby networks:
+  Serial.println("** Scan Networks **");
+  int numSsid = WiFi.scanNetworks();
+  if (numSsid == -1) {
+    Serial.println("Couldn't get a wifi connection");
+    while (true);
+  }
+
+  // print the list of networks seen:
+  Serial.print("number of available networks:");
+  Serial.println(numSsid);
+
+  // print the network number and name for each network found:
+  for (int thisNet = 0; thisNet < numSsid; thisNet++) {
+    Serial.print(thisNet);
+    Serial.print(") ");
+    Serial.print(WiFi.SSID(thisNet));
+    Serial.print("\tSignal: ");
+    Serial.print(WiFi.RSSI(thisNet));
+    Serial.print(" dBm\n");
+    
   }
 }
