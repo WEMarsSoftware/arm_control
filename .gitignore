@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# Library files
+*.cpp
+*.h
