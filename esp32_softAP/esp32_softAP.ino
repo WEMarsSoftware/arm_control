@@ -9,7 +9,6 @@
 
 const char* ssid = "MY_ESP32_WIFI"; 
 const char* password = "password1"; // MUST be 8 characters or more (will default to unsecured)
-String header;
 
 AsyncWebServer server(80);
 IPAddress staticIP(10,10,10,10);
