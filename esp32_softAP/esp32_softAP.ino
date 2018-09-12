@@ -7,7 +7,7 @@
 #include <WiFi.h>
 #include "ESPAsyncWebServer.h"
 
-const char* ssid = "MY_ESP32_WIFI"; 
+const char* ssid = "WEMars_00"; 
 const char* password = "password1"; // MUST be 8 characters or more (will default to unsecured)
 
 AsyncWebServer server(80);
