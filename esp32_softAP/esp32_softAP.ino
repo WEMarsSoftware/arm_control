@@ -15,7 +15,7 @@ IPAddress staticIP(10,10,10,10);
 IPAddress gateway(10,10,10,1);
 IPAddress subnet(255,255,255,0);  
 
-String response = "Hello World!";
+String response = "{}";
 
 void setup(){
   Serial.begin(115200);
@@ -30,10 +30,12 @@ void setup(){
   Serial.println(WiFi.softAPIP());
   Serial.println(WiFi.localIP());
 
-  // callback (if url is <staticIP>/hello)
-  server.on("/hello", HTTP_GET, [](AsyncWebServerRequest *request){
+  server.on("", HTTP_GET, [](AsyncWebServerRequest *request){
     // read from a sensor here
-
+    int temp = 0;
+    
+    String temp_string(temp);
+    response = "temperature: "+ temp_string;
     // send response
     request->send(200, "text/plain", response);
   });
