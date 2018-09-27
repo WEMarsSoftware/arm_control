@@ -34,3 +34,5 @@
 # Library files
 *.cpp
 *.h
+
+*DS_STORE
