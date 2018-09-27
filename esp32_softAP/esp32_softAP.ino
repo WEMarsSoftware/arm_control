@@ -7,9 +7,6 @@
  
 #include <WiFi.h>
 #include "ESPAsyncWebServer.h"
-
-// custom connectToWiFI()
-// and setupESPServer() functions
 #include "CommunicationStuff.hh"
 #include "ReadSensors.hh";
 
@@ -23,33 +20,16 @@
  */
  int motorCurrents[6] = {};  
 
-
-/**
- * Connect to Rover WiFi,
- * define HTTP callbacks,
- * set static IP.
- */
 void setup()
 {
     Serial.begin(115200);
+	pinMode(ULTRASONIC_TRIG_PIN, OUTPUT);
+	pinMode(ULTRASONIC_ECHO_PIN, INPUT);
 
-	pinMode(ULTRASONIC_TRIG_PIN, OUTPUT); // Sets the trigPin as an Output
-	pinMode(ULTRASONIC_ECHO_PIN, INPUT); // Sets the echoPin as an Input
-
-    // inline
+    // are inline
     connectToWiFi();
     setupESPServer();
 }
 
-/**
- * Update sensor values every little while.
- */
-void loop()
-{
-    // read for all sensors
 
-    // check currents for exceeding MAX_CURRENT_ALLOWED
-    // output to direct line to another esp32 which listens for
-    
-    // Digi-Key 620-1542-5-ND Current Transducer
-}
+void loop() { /* Intentionally empty. Required for Asynchronous Web Server. */ }
