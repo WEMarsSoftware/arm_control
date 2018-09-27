@@ -5,14 +5,20 @@
 
 #include "Arduino.h"
 
+// Note: different than Arduino
+const int MAX_ANALOG_IN = 4,095;
+const int MIN_ANALOG_IN = 0;
 // ULTRASONIC SENSOR ON ARM
-const int ULTRASONIC_TRIG_PIN = 11;
-const int ULTRASONIC_ECHO_PIN = 12;
+// digital -> use any pin
+const int ULTRASONIC_TRIG_PIN = 26;
+const int ULTRASONIC_ECHO_PIN = 27;
 
 // CURRENT SENSORS
 // varies linearly with DC in
 const int NUM_CURRENT_SENSORS = 6;
-const int CURRENT_SENSOR_VOUT[NUM_CURRENT_SENSORS] = {4, 5, 6, 7, 8, 9};
+// GPIO on left side of board (ADCI_0 -> ADCI_5)
+// > 31 when WiFi on see https://cdn.instructables.com/FQM/7X6B/J7GGGD9O/FQM7X6BJ7GGGD9O.LARGE.jpg
+const int CURRENT_SENSOR_VOUT[NUM_CURRENT_SENSORS] = {36, 39, 34, 35, 32, 33}; 
 const int MAX_CURRENT_IN = 50;
 
 void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int& armDistance)
@@ -24,7 +30,7 @@ void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int& armDista
 		tempCurrentRead[i] = analogRead(CURRENT_SENSOR_VOUT[i]);
 
 		// map from analogRead min, max to 0->50 Amps
-		map(tempCurrentRead[i], 0, 1023, 0, MAX_CURRENT_IN);
+		map(tempCurrentRead[i], MIN_ANALOG_IN, MAX_ANALOG_IN, MIN_ANALOG_IN, MAX_CURRENT_IN);
 	}
 
 	// pulse ultrasonic sensor
