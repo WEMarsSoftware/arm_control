@@ -10,20 +10,21 @@ const int ULTRASONIC_TRIG_PIN = 11;
 const int ULTRASONIC_ECHO_PIN = 12;
 
 // CURRENT SENSORS
-// see https://www.digikey.ca/en/datasheets/allegromicrosystemsllc/allegro-microsystems-llcacs770datasheet
-// varies linearly with A/C in
-const int CURRENT_SENSOR_VOUT[6] = {4, 5, 6, 7, 8, 9};
+// varies linearly with DC in
+const int NUM_CURRENT_SENSORS = 6;
+const int CURRENT_SENSOR_VOUT[NUM_CURRENT_SENSORS] = {4, 5, 6, 7, 8, 9};
+const int MAX_CURRENT_IN = 50;
 
-void inline getSensorData(int currentSensors[6], int& armDistance)
+void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int& armDistance)
 {
-	int tempCurrentRead[6] = {};
-	for (int i = 0; i < 6; i++)
+	int tempCurrentRead[NUM_CURRENT_SENSORS] = {};
+	for (int i = 0; i < NUM_CURRENT_SENSORS; i++)
 	{
 		// some number from 0->1023
 		tempCurrentRead[i] = analogRead(CURRENT_SENSOR_VOUT[i]);
 
-		// somewhere from 0->60 amps
-		map(tempCurrentRead[i], 0, 1023, 0, 60);
+		// map from analogRead min, max to 0->50 Amps
+		map(tempCurrentRead[i], 0, 1023, 0, MAX_CURRENT_IN);
 	}
 
 	// pulse ultrasonic sensor
