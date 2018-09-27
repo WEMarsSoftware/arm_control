@@ -6,6 +6,7 @@
 #include "Arduino.h"
 #include <WiFi.h>
 #include "ESPAsyncWebServer.h"
+#include "ReadSensors.hh"
 
 // INFO FOR LOCAL ROUTER
 const char* ssid = "WE MARS Rover"; 
@@ -21,6 +22,9 @@ IPAddress subnet(255,255,255,0);
 byte mac[6];
 // TODO: change this
 String response = "{}";
+
+int currentSensors[6] = {};
+int armDistance = 0;
 
 void inline connectToWiFi()
 {
@@ -86,16 +90,14 @@ void inline setupESPServer()
   /**
    * Some HTTP callbacks.
    * No parameters -> send everything in response
-   * 
-   * TODO: add specific sensor values.
    */
    server.on("", HTTP_GET, [](AsyncWebServerRequest *request){
-    // read from a sensor here
-    int temp = 0;
-    
-    String temp_string(temp);
-    response = "temperature: "+ temp_string;
-    // send response
+    response = "TEST DATA";
+
+    getSensorData(currentSensors, armDistance);
+
+    //TODO: parse data, add to String response
+
     request->send(200, "text/plain", response);
   });
  

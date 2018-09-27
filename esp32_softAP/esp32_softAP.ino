@@ -11,13 +11,7 @@
 // custom connectToWiFI()
 // and setupESPServer() functions
 #include "CommunicationStuff.hh"
-
-// PIN CONSTANTS
-const int ULTRASONIC_TRIG_PIN = 11;
-const int ULTRASONIC_ECHO_PIN = 12;
-
-// Sensor values
-int armDistance = 0;
+#include "ReadSensors.hh";
 
 /**
  * MOTOR LAYOUT [1 -> 1 mapping of array indices]
@@ -29,6 +23,7 @@ int armDistance = 0;
  */
  int motorCurrents[6] = {};  
 
+
 /**
  * Connect to Rover WiFi,
  * define HTTP callbacks,
@@ -37,6 +32,9 @@ int armDistance = 0;
 void setup()
 {
     Serial.begin(115200);
+
+	pinMode(ULTRASONIC_TRIG_PIN, OUTPUT); // Sets the trigPin as an Output
+	pinMode(ULTRASONIC_ECHO_PIN, INPUT); // Sets the echoPin as an Input
 
     // inline
     connectToWiFi();
