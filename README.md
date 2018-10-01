@@ -11,7 +11,7 @@ Refer to: https://github.com/espressif/arduino-esp32#development-status
 
 *Note: May need to hold down boot button while uploading programs.
 
-# esp32_softAP (to be renamed)
+# In src/
 - C++ code for esp-32 to interface with 6 current sensors and 1 ultrasonic sensor
   - Dependencies: esp-32 SDK, as well as Arduino and ESPAsyncWebServer libraries 
 - HTML and JavaScript for running at the driver's control station
