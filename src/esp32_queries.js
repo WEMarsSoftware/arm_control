@@ -17,12 +17,13 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		text:"Current Draw per Motor"
 	},
 	axisX:{
+		title: "Motor",
 		interval: 1
 	},
 	axisY2:{
 		interlacedColor: "rgba(1,77,101,.2)",
 		gridColor: "rgba(1,77,101,.1)",
-		title: "Current"
+		title: "Current[A]"
 	},
 	data: [{
 		type: "bar",
@@ -77,16 +78,34 @@ async function runQueries()
   		});
 
   		// update chart every second
-		await sleep(REFRESH_RATE);
 		chart.render();
 		var j = 0;
 		for (; j < currents.length; j++)
 		{
 			chart.options.data[0].dataPoints[j].y = currents[j];  // Update data points
 		}
+		await sleep(REFRESH_RATE);
 	}
 }
 
 // run the script
 runQueries();
+}
+
+// button clicked (to restart motors)
+function restartMotors() {
+    var server;
+	if (TEST_MODE)
+	{
+		server = testServer;
+	}
+	else
+	{
+		server = espAddress;
+	}
+
+	fetch(server+"/restart")
+  		.then(function(response) {
+    		return response.json();
+ 	 })
 }
