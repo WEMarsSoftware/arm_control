@@ -14,5 +14,6 @@ Refer to: https://github.com/espressif/arduino-esp32#development-status
 # In src/
 - C++ code for esp-32 to interface with 6 current sensors and 1 ultrasonic sensor
   - Dependencies: esp-32 SDK, as well as Arduino and ESPAsyncWebServer libraries 
-- HTML and JavaScript for running at the driver's control station
+- HTML, CSS, and JavaScript for running at the driver's control station
   - Known Browser Support: Microsoft Edge (2018), Google Chrome (2016), Firefox (2018)
+  - Dependencies: canvas.js and gauge.min.js libraries (MIT Licensed)
