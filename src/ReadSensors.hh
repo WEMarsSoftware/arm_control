@@ -6,7 +6,7 @@
 #include "Arduino.h"
 
 // Note: different than Arduino
-const int MAX_ANALOG_IN = 4,095;
+const int MAX_ANALOG_IN = 4095;
 const int MIN_ANALOG_IN = 0;
 // ULTRASONIC SENSOR ON ARM
 // digital -> use any pin
