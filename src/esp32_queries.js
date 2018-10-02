@@ -1,13 +1,16 @@
 
+
+const TEST_MODE = true;
+
 window.onload = function() {
 
 var testServer = "https://jsonplaceholder.typicode.com/todos/1";
 var espAddress = "http://192.168.1.15";
 
-const TEST_MODE = true;
 const REFRESH_RATE = 1000; // in ms
 
 var currents = [10, 20.5, 30, 5.3, 11, 8];
+var armDistance = 0;
 
 // bar graph
 var chart = new CanvasJS.Chart("chartContainer", {
@@ -40,6 +43,24 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		]
 	}]
 });
+
+var opts = {
+  angle: 0.15, /// The span of the gauge arc
+  lineWidth: 0.44, // The line thickness
+  pointer: {
+    length: 0.9, // Relative to gauge radius
+    strokeWidth: 0.035 // The thickness
+  },
+  colorStart: '#6FADCF',   // Colors
+  colorStop: '#8FC0DA',    // just experiment with them
+  strokeColor: '#E0E0E0'   // to see which ones work best for you
+};
+var target = document.getElementById('armDistanceGauge'); // your canvas element
+var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+gauge.maxValue = 3000; // set max gauge value
+gauge.setMinValue(0);  // set min value
+gauge.set(1250); // set actual value
+gauge.setTextField(document.getElementById("preview-textfield"));
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -75,6 +96,9 @@ async function runQueries()
     		currents[4] = parseInt(obj.Motor5, 10);
     		currents[5] = parseInt(obj.Motor6, 10);
 
+    		armDistance = parseInt(obj.ArmDistance, 10);
+    		gauge.set(armDistance); // set actual value
+			gauge.setTextField(document.getElementById("preview-textfield"));
   		});
 
   		// update chart every second

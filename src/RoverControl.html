@@ -1,5 +1,10 @@
 <!doctype html>
 <html lang="en">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="theme.css">
+</head>
+
 <head>
   <meta charset="utf-8">
   <title>WEMars Rover Sensors</title>
@@ -10,6 +15,13 @@
   <script src="esp32_queries.js"></script>
   <div id="chartContainer" style="height: 300px; width: 100%;"></div>
 	<script src="canvas.js"></script>
-	<button onclick="restartMotors()">RESTART MOTORS</button>
+	<div class="gauge">
+  <canvas width="200" height="200" id="armDistanceGauge"></canvas>
+  <div id="preview-textfield" style="font-size: 15px;">0%</div>
+  <a> (in cm) </a>
+	<script src="gauge.js"></script>
+</body>
+<body>
+	<button id="button1" onclick="restartMotors()">RESTART MOTORS</button>
 </body>
 </html>

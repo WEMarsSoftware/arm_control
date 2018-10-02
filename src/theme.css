@@ -1,0 +1,16 @@
+#preview-textfield {
+	position:relative;
+}
+
+#armDistanceGauge {
+	position: relative;
+}
+#button1 {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50; /* Green */
+    position: absolute;
+    left: 300px;
+	top: 320px;
+    height:200px;
+}
