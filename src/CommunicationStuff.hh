@@ -92,11 +92,17 @@ void inline setupESPServer()
    * No parameters -> send everything in response
    */
    server.on("", HTTP_GET, [](AsyncWebServerRequest *request){
-    response = "TEST DATA";
 
     getSensorData(currentSensors, armDistance);
 
-    //TODO: parse data, add to String response
+    // send JSON response
+    response = "{ \"Motor1\":\"" + String(currentSensors[0]) + "\",
+                  \"Motor2\":\"" + String(currentSensors[1]) + "\",
+                  \"Motor3\":\"" + String(currentSensors[2]) + "\",
+                  \"Motor4\":\"" + String(currentSensors[3]) + "\",
+                  \"Motor5\":\"" + String(currentSensors[4]) + "\",
+                  \"Motor6\":\"" + String(currentSensors[5]) + "\",
+                  \"ArmDistance\":\"" + String(armDistance) + "\" }";
 
     request->send(200, "text/plain", response);
   });

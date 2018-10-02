@@ -1,14 +1,13 @@
 
 window.onload = function() {
-// make test queries (HTTP GET test server);
-var testServer = "https://httpbin.org";
+
+var testServer = "https://jsonplaceholder.typicode.com/todos/1";
 var espAddress = "http://192.168.1.15";
-var motorIDs = ["Motor1","Motor2","Motor3","Motor4","Motor5","Motor6"];
-var motorShutdown = 1;
 
-const TEST_MODE = false;
+const TEST_MODE = true;
+const REFRESH_RATE = 1000; // in ms
 
-var currents = [10, 20.5, 30, 15.3, 11, 8];
+var currents = [10, 20.5, 30, 5.3, 11, 8];
 
 // bar graph
 var chart = new CanvasJS.Chart("chartContainer", {
@@ -48,43 +47,43 @@ function sleep(ms) {
 // continuously make HTTP GET requests to the esp32 and display info in browser
 async function runQueries()
 {
+	var server;
+	if (TEST_MODE)
+	{
+		server = testServer;
+	}
+	else
+	{
+		server = espAddress;
+	}
+
 	while(true)
 	{
-		/*
-		if (!TEST_MODE)
-		{
-			fetch(testServer).then(function(response) {
-				// response should be full text response
-				var i;
-				for (i = 0; i < motorIDs.length; i++) { 
-    				document.getElementById(motorIDs[i]).innerHTML = document.getElementById(motorIDs[i]).innerHTML.slice(0, -4);
-    				document.getElementById(motorIDs[i]).innerHTML += "NEW#";
+		
+		fetch(server)
+  		.then(function(response) {
+    		return response.json();
+ 	 	})
+  		.then(function(myJson) {
+   	 		var obj = JSON.parse(myJson);
+   	 		currents[0] = parseInt(obj.Motor1, 10);
+    		currents[1] = parseInt(obj.Motor2, 10);
+    		currents[2] = parseInt(obj.Motor3, 10);
 
-    				//TODO: parse response and properly check for motor shutoff event
-    				if (motorShutdown != -1)
-    				{
-						document.getElementById(motorIDs[motorShutdown-1]).style.color = "red";
-    				}
-				}
+    		currents[3] = parseInt(obj.Motor4, 10);
+    		currents[4] = parseInt(obj.Motor5, 10);
+    		currents[5] = parseInt(obj.Motor6, 10);
 
-				if (response.prototype.includes("shutoff"))
-				{
-					// do something useful
-				}
-			});
-		}
+  		});
 
-		await sleep(3000);
-
-		if (TEST_MODE)
-		{
-				fetch(espAddress).then(function(response) {
-					// placeholder
-			});
-		}*/
-		await sleep(1000);
+  		// update chart every second
+		await sleep(REFRESH_RATE);
 		chart.render();
-		chart.options.data[0].dataPoints[3].y += 5;  // Update an existing dataPoint
+		var j = 0;
+		for (; j < currents.length; j++)
+		{
+			chart.options.data[0].dataPoints[j].y = currents[j];  // Update data points
+		}
 	}
 }
 
