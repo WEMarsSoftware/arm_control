@@ -1,23 +1,24 @@
 
 
 const TEST_MODE = true;
-
-window.onload = function() {
-
 var testServer = "https://jsonplaceholder.typicode.com/todos/1";
 var espAddress = "http://192.168.1.15";
 
+const CHART_TITLE = "Current Draw per Motor";
 const REFRESH_RATE = 1000; // in ms
 
 var currents = [10, 20.5, 30, 5.3, 11, 8];
 var armDistance = 0;
+var motorShutdown = 0;
+var chart;
+window.onload = function() {
 
 // bar graph + options
-var chart = new CanvasJS.Chart("chartContainer", {
+chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 	
 	title:{
-		text:"Current Draw per Motor"
+		text:CHART_TITLE
 	},
 	axisX:{
 		title: "Motor",
@@ -102,6 +103,9 @@ async function runQueries()
     		armDistance = parseInt(obj.ArmDistance, 10);
     		gauge.set(armDistance); // set actual value
 			gauge.setTextField(document.getElementById("preview-textfield"));
+
+			// check for motor shutdown
+			motorShutdown = parseInt(obj.MotorShutdown, 10);
   		});
 
   		// update chart every second
@@ -112,6 +116,11 @@ async function runQueries()
 			chart.options.data[0].dataPoints[j].y = currents[j];  // Update data points
 		}
 		await sleep(REFRESH_RATE);
+
+		if (motorShutdown != 0)
+		{
+			chart.options.title.text = "ERROR MOTOR " + String(motorShutdown) + "SHUTDOWN!!!";
+		}
 	}
 }
 
@@ -121,6 +130,9 @@ runQueries();
 
 // button clicked callback (to restart motors)
 function restartMotors() {
+	// reset title
+	chart.options.title.text = CHART_TITLE;
+
     var server;
 	if (TEST_MODE)
 	{

@@ -25,6 +25,7 @@ String response = "{}";
 
 int currentSensors[6] = {};
 int armDistance = 0;
+int motorShutdown = 0;
 
 void inline connectToWiFi()
 {
@@ -102,9 +103,17 @@ void inline setupESPServer()
                 + "\",\"Motor4\":\"" + String(currentSensors[3])
                 + "\",\"Motor5\":\"" + String(currentSensors[4])
                 + "\",\"Motor6\":\"" + String(currentSensors[5])
-                + "\",\"ArmDistance\":\"" + String(armDistance) + "\" }";
+                + "\",\"ArmDistance\":\"" + String(armDistance) 
+                + "\",\"MotorShutdown\":\"" + String(motorShutdown) +"\"}";
 
     request->send(200, "text/plain", response);
+  });
+
+
+   // restart motors callback
+   server.on("/restart", HTTP_GET, [](AsyncWebServerRequest *request){
+
+    request->send(200, "text/plain", "SUCCESS");
   });
  
   server.begin();
