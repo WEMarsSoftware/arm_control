@@ -9,7 +9,7 @@
 #include "ReadSensors.hh"
 
 // INFO FOR LOCAL ROUTER
-const char* ssid = "WE MARS Rover"; 
+const char* ssid = "WE MARS Rover";
 const char* password = "westillfirst";
 
 // COMMUNICATION CONSTANTS
