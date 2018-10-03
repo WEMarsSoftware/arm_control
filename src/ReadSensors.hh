@@ -8,6 +8,7 @@
 // Note: different than Arduino
 const int MAX_ANALOG_IN = 4095;
 const int MIN_ANALOG_IN = 0;
+
 // ULTRASONIC SENSOR ON ARM
 // digital -> use any pin
 const int ULTRASONIC_TRIG_PIN = 26;
@@ -16,10 +17,11 @@ const int ULTRASONIC_ECHO_PIN = 27;
 // CURRENT SENSORS
 // varies linearly with DC in
 const int NUM_CURRENT_SENSORS = 6;
+
 // GPIO on left side of board (ADCI_0 -> ADCI_5)
 // > 31 when WiFi on see https://cdn.instructables.com/FQM/7X6B/J7GGGD9O/FQM7X6BJ7GGGD9O.LARGE.jpg
 const int CURRENT_SENSOR_VOUT[NUM_CURRENT_SENSORS] = {36, 39, 34, 35, 32, 33}; 
-const int MAX_CURRENT_IN = 50;
+const int MAX_CURRENT_IN = 33;
 
 void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int& armDistance)
 {

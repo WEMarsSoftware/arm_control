@@ -90,7 +90,7 @@ void inline setupESPServer()
 {
   /**
    * Some HTTP callbacks.
-   * No parameters -> send everything in response
+   * No parameters -> send all sensor data in response
    */
    server.on("", HTTP_GET, [](AsyncWebServerRequest *request){
 
@@ -110,8 +110,12 @@ void inline setupESPServer()
   });
 
 
-   // restart motors callback
+   /**
+    * /restart parameter -> restart motors after shutoff
+    */
    server.on("/restart", HTTP_GET, [](AsyncWebServerRequest *request){
+
+    /* Somehow restart motors */
 
     request->send(200, "text/plain", "SUCCESS");
   });
