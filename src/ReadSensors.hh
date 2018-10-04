@@ -20,7 +20,7 @@ const int NUM_CURRENT_SENSORS = 6;
 
 // GPIO on left side of board (ADCI_0 -> ADCI_5)
 // > 31 when WiFi on see https://cdn.instructables.com/FQM/7X6B/J7GGGD9O/FQM7X6BJ7GGGD9O.LARGE.jpg
-const int CURRENT_SENSOR_VOUT[NUM_CURRENT_SENSORS] = {36, 39, 34, 35, 32, 33}; 
+const int CURRENT_SENSOR_VOUT[NUM_CURRENT_SENSORS] = {32, 33, 34, 35, 36, 39}; 
 const int MAX_CURRENT_IN = 33;
 
 void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int& armDistance)
