@@ -31,10 +31,6 @@
 *.out
 *.app
 
-# Library files
-*.cpp
-*.h
-
 *DS_STORE
 canvas.js
 gauge.js
