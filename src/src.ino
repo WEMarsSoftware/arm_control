@@ -1,4 +1,6 @@
 /**
+ * src.ino -> main setup and loop
+ * 
  * Thank you to:
  * Nuno Santos: https://techtutorialsx.com/2018/01/07/esp32-arduino-http-server-over-soft-ap/
  * me-no-dev:   https://github.com/me-no-dev/ESPAsyncWebServer
@@ -22,13 +24,13 @@
 
 void setup()
 {
-    Serial.begin(115200);
+  Serial.begin(115200);
 	pinMode(ULTRASONIC_TRIG_PIN, OUTPUT);
 	pinMode(ULTRASONIC_ECHO_PIN, INPUT);
 
-    // are inline
-    connectToWiFi();
-    setupESPServer();
+  // are inline
+  connectToWiFi();
+  setupESPServer();
 }
 
 

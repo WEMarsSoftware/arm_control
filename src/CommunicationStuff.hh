@@ -1,15 +1,16 @@
-// CommunicationSetup.hpp
+// CommunicationStuff.hh
 
 #ifndef COMMUNICATION_SETUP
 #define COMMUNICATION_SETUP
 
 #include "Arduino.h"
 #include <WiFi.h>
+#include <FS.h>
 #include "ESPAsyncWebServer.h"
 #include "ReadSensors.hh"
 
 // INFO FOR LOCAL ROUTER
-const char* ssid = "WE MARS Rover";
+ char* ssid = "WE MARS Rover";
 const char* password = "westillfirst";
 
 // COMMUNICATION CONSTANTS
@@ -30,7 +31,7 @@ int motorShutdown = 0;
 void inline connectToWiFi()
 {
   // Set WiFi to station mode and disconnect from an AP if it was previously connected
-    WiFi.mode(WIFI_STA);
+    //WiFi.mode(WIFI_STA);
     WiFi.disconnect();
     delay(100);
 
@@ -58,7 +59,7 @@ void inline connectToWiFi()
             Serial.print(" (");
             Serial.print(WiFi.RSSI(i));
             Serial.print(")");
-            Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+           // Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
             delay(10);
         }
     }
