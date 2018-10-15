@@ -13,4 +13,5 @@ Refer to: https://github.com/espressif/arduino-esp32#development-status
 
 # In src/
 - C++ code for esp-32 to interface with 6 current sensors and 1 ultrasonic sensor
-  - Dependencies: esp-32 SDK, as well as Arduino, AsyncTCP, and  ESPAsyncWebServer libraries
+  - Dependencies: esp-32 SDK, as well as Arduino, AsyncTCP, ESPAsyncWebServer and espressif-esp32 tools (staging) libraries
+  - Headers should be installed in Documents/Arduino/libraries
