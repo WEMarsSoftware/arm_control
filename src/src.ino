@@ -12,21 +12,19 @@
 #include "CommunicationStuff.hh"
 #include "ReadSensors.hh";
 
-/**
- * MOTOR LAYOUT [1 -> 1 mapping of array indices]
- * 0 -- 3
- *   ||
- * 1 -- 4
- *   ||
- * 2 -- 5
- */
- int motorCurrents[6] = {};  
+const int ARM_DRIVE_PINS[] = {32, 33, 35, 4, 2, 15};
+const int ARM_DRIVE_CHANNELS[] = {1, 2, 3, 4, 5, 6};
+const int NUM_ARM_MOTORS = 6;
 
 void setup()
 {
   Serial.begin(115200);
-	pinMode(ULTRASONIC_TRIG_PIN, OUTPUT);
-	pinMode(ULTRASONIC_ECHO_PIN, INPUT);
+
+  // setup electrical stuff
+  for (int i = 0; i < NUM_ARM_MOTORS; i++) {
+    setup(ARM_DRIVE_PINS[i], ARM_DRIVE_CHANNELS[i]);
+    setDriveChannel(i, ARM_DRIVE_CHANNELS[i]);
+  }
 
   // are inline
   connectToWiFi();

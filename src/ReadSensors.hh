@@ -9,42 +9,76 @@
 const int MAX_ANALOG_IN = 4095;
 const int MIN_ANALOG_IN = 0;
 
-// ULTRASONIC SENSOR ON ARM
-// digital -> use any pin
-const int ULTRASONIC_TRIG_PIN = 26;
-const int ULTRASONIC_ECHO_PIN = 27;
-
 // CURRENT SENSORS
 // varies linearly with DC in
 const int NUM_CURRENT_SENSORS = 6;
-
-// GPIO on left side of board (ADCI_0 -> ADCI_5)
-// > 31 when WiFi on see https://cdn.instructables.com/FQM/7X6B/J7GGGD9O/FQM7X6BJ7GGGD9O.LARGE.jpg
-const int CURRENT_SENSOR_VOUT[NUM_CURRENT_SENSORS] = {32, 33, 34, 35, 36, 39}; 
 const int MAX_CURRENT_IN = 33;
 
-void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int& armDistance)
+// Should be pins > 31 when WiFi on
+const int CURRENT_SENSOR_VIN = 37;
+const int MUX_SELECT_VOUT = {36, 39, 34}
+const int POT_PINS = {13, 12, 14, 27, 26, 25};
+// [0] is LSb and [2] is MSb
+uint8_t muxSelects[3] = {};
+
+
+void inline updateMuxSelect() {
+	digitalWrite(MUX_SELECT_VOUT[0], muxSelects[0]);
+	digitalWrite(MUX_SELECT_VOUT[1], muxSelects[1]);
+	digitalWrite(MUX_SELECT_VOUT[2], muxSelects[2]);
+}
+
+/* 
+ * After each call to updateMuxSelect() we now have routed a current sensor
+ * read-out signal to CURRENT_SENSOR_VIN pin
+ */
+uint8_t currentNum = 0;
+void readCurrentVal(int* a) {
+	updateMuxSelect();
+	a[currentNum] = analogRead(CURRENT_SENSOR_VIN);
+	currentNum++;
+	if (currentNum == 5) { currentNum = 0; }
+}
+
+/**
+ * Inputs are routed to a 3x8 multiplexer.
+ * After each call to updateMuxSelect() we now have routed a current sensor
+ * read-out signal to CURRENT_SENSOR_VIN pins
+ */
+void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int pots[NUM_CURRENT_SENSORS])
 {
-	int tempCurrentRead[NUM_CURRENT_SENSORS] = {};
+	// signal 000
+	muxSelects[0] = muxSelects[1] = muxSelects[2] = 0;
+	readCurrentVal(currentSensors);
+
+	// signal 001
+	muxSelects[2] = 1;
+	readCurrentVal(currentSensors);
+
+	// signal 010
+	muxSelects[1] = 1;
+	muxSelects[2] = 0;
+	readCurrentVal(currentSensors);
+
+	// signal 011
+	muxSelects[2] = 1;
+	readCurrentVal(currentSensors);
+
+	// signal 100
+	muxSelects[0] = 1;
+	muxSelects[1] = muxSelects[2] = 0;
+	readCurrentVal(currentSensors);
+
+	// signal 101
+	muxSelects[2] = 1;
+	readCurrentVal(currentSensors);
+	
+	// map to a number between 0 and 4095 to 0->33 Amps
 	for (int i = 0; i < NUM_CURRENT_SENSORS; i++)
 	{
-		// some number from 0->1023
-		tempCurrentRead[i] = analogRead(CURRENT_SENSOR_VOUT[i]);
-
-		// map from analogRead min, max to 0->50 Amps
-		map(tempCurrentRead[i], MIN_ANALOG_IN, MAX_ANALOG_IN, MIN_ANALOG_IN, MAX_CURRENT_IN);
+		POT_PINS[i] = analogRead(potPins[i]);
+		map(currentValues[i], MIN_ANALOG_IN, MAX_ANALOG_IN, MIN_ANALOG_IN, MAX_CURRENT_IN);
 	}
-
-	// pulse ultrasonic sensor
-	digitalWrite(ULTRASONIC_TRIG_PIN, LOW);
-	delayMicroseconds(2);
-	digitalWrite(ULTRASONIC_TRIG_PIN, HIGH);
-	delayMicroseconds(10);
-	digitalWrite(ULTRASONIC_TRIG_PIN, LOW);
-	double duration = pulseIn(ULTRASONIC_ECHO_PIN, HIGH);
-
-	// Calculating the distance
-	armDistance = duration*0.034/2;
 }
 
 #endif

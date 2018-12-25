@@ -15,27 +15,25 @@ const char* password = "westillfirst";
 
 // COMMUNICATION CONSTANTS
 AsyncWebServer server(80);
-IPAddress staticIP(192,168,1,15);
+IPAddress staticIP(20,20,20,20);
 IPAddress gateway(10,10,10,1);
 IPAddress subnet(255,255,255,0);
+const String GET_PARAMS[] = {"motor1", "motor2", "motor3", "motor4", "motor5", "motor6"};
 
-// byte array representing MAC address
-byte mac[6];
 // TODO: change this
 String response = "{}";
 
 int currentSensors[6] = {};
-int armDistance = 0;
-int motorShutdown = 0;
+int potVals[6] = {};
 
 void inline connectToWiFi()
 {
-  // Set WiFi to station mode and disconnect from an AP if it was previously connected
+    // Set WiFi to station mode and disconnect from an AP if it was previously connected
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();
     delay(100);
 
-    // ensure our IP is 10.10.10.10
+    // ensure our IP is 20.20.20.20 (other ESP is 10.10.10.10)
     WiFi.config(staticIP, gateway, subnet);
     
     delay(100);
@@ -54,39 +52,54 @@ void inline connectToWiFi()
   Serial.println(WiFi.localIP());
 }
 
+int numParams = request->params();
+int motorParams[6] = {};
 void inline setupESPServer()
 {
   /**
    * Some HTTP callbacks.
-   * No parameters -> send all sensor data in response
+   * This expects a GET to:
+   * <IP>/?motor1=10&motor2=....
+   * ie. a number between -100 and +100 for each motor1 -> motor6 of arm
    */
-   server.on("", HTTP_GET, [](AsyncWebServerRequest *request){
+   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
 
-    getSensorData(currentSensors, armDistance);
+      for ( int i = 0; i < numParams; i++ ) {
+        AsyncWebParameter* p = request->getParam(i);
+        motorParams[i] = (p->value()).toInt();
+      }
+       
+      // if all went well, we now have the 6 power percentage values
+      // use our Electrical API to move arm motors
+      moveMotors(&motors[0]);
 
-    // send JSON response
-    response = "{ \"Motor1\":\"" + String(currentSensors[0]) 
-                + "\",\"Motor2\":\"" + String(currentSensors[1])
-                + "\",\"Motor3\":\"" + String(currentSensors[2])
-                + "\",\"Motor4\":\"" + String(currentSensors[3])
-                + "\",\"Motor5\":\"" + String(currentSensors[4])
-                + "\",\"Motor6\":\"" + String(currentSensors[5])
-                + "\",\"ArmDistance\":\"" + String(armDistance) 
-                + "\",\"MotorShutdown\":\"" + String(motorShutdown) +"\"}";
+      // grab current and potentiometer values 
+      getSensorData(&currentSensors[0], &potVals[0]);
 
-    request->send(200, "text/plain", response);
-  });
+      // send JSON response
+      response = "{ \"Current-Motor1\":\"" + String(currentSensors[0]) 
+                + "\",\"Current-Motor2\":\"" + String(currentSensors[1])
+                + "\",\"Current-Motor3\":\"" + String(currentSensors[2])
+                + "\",\"Current-Motor4\":\"" + String(currentSensors[3])
+                + "\",\"Current-Motor5\":\"" + String(currentSensors[4])
+                + "\",\"Current-Motor6\":\"" + String(currentSensors[5])
+                + "\",\"Pot-Motor1\":\"" + String(potVals[0])
+                + "\",\"Pot-Motor2\":\"" + String(potVals[1])
+                + "\",\"Pot-Motor3\":\"" + String(potVals[2])
+                + "\",\"Pot-Motor4\":\"" + String(potVals[3])
+                + "\",\"Pot-Motor5\":\"" + String(potVals[4])
+                + "\",\"Pot-Motor6\":\"" + String(potVals[5])
+                + "\"}";
+
+      request->send(200, "text/plain", response);
+    });
 
 
-   /**
-    * /restart parameter -> restart motors after shutoff
-    */
-   server.on("/restart", HTTP_GET, [](AsyncWebServerRequest *request){
-
-    /* Somehow restart motors */
-
-    request->send(200, "text/plain", "SUCCESS");
-  });
+  // used to test connection 
+  server.on("/hello", HTTP_GET, [](AsyncWebServerRequest *request){ 
+       // send hello back
+       request->send(200, "text/plain", "HELLO");
+   });
  
   server.begin();
 }
