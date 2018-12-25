@@ -12,6 +12,6 @@ Refer to: https://github.com/espressif/arduino-esp32#development-status
 *Note: May need to hold down boot button while uploading programs.
 
 # In src/
-- C++ code for esp-32 to interface with 6 current sensors and 1 ultrasonic sensor
-  - Dependencies: esp-32 SDK, as well as Arduino, AsyncTCP, ESPAsyncWebServer and espressif-esp32 tools (staging) libraries
+- C++ code for an ESP-32 to interface with 6 VEX Victor motor controllers, 6 current sensors, and 6 potentiometers
+  - Dependencies: esp-32 SDK, as well as Arduino, AsyncTCP, ESPAsyncWebServer and espressif-esp32 tools (staging) libraries (including LEDC PWM headers)
   - Headers should be installed in Documents/Arduino/libraries
