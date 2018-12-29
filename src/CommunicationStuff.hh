@@ -1,7 +1,7 @@
 // CommunicationStuff.hh
 
-#ifndef COMMUNICATION_SETUP
-#define COMMUNICATION_SETUP
+#ifndef COMMUNICATION_STUFF
+#define COMMUNICATION_STUFF
 
 #include "Arduino.h"
 #include <WiFi.h>
@@ -98,7 +98,7 @@ void inline setupESPServer()
   // used to test connection 
   server.on("/hello", HTTP_GET, [](AsyncWebServerRequest *request){ 
        // send hello back
-       request->send(200, "text/plain", "HELLO");
+       request->send(200, "text/plain", "Hello!");
    });
  
   server.begin();
