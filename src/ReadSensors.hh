@@ -16,8 +16,8 @@ const int MAX_CURRENT_IN = 33;
 
 // Should be pins > 31 when WiFi on
 const int CURRENT_SENSOR_VIN = 37;
-const int MUX_SELECT_VOUT = {36, 39, 34}
-const int POT_PINS = {13, 12, 14, 27, 26, 25};
+const int MUX_SELECT_VOUT[] = {36, 39, 34};
+const int POT_PINS[] = {13, 12, 14, 27, 26, 25};
 // [0] is LSb and [2] is MSb
 uint8_t muxSelects[3] = {};
 
@@ -76,8 +76,8 @@ void inline getSensorData(int currentSensors[NUM_CURRENT_SENSORS], int pots[NUM_
 	// map to a number between 0 and 4095 to 0->33 Amps
 	for (int i = 0; i < NUM_CURRENT_SENSORS; i++)
 	{
-		POT_PINS[i] = analogRead(potPins[i]);
-		map(currentValues[i], MIN_ANALOG_IN, MAX_ANALOG_IN, MIN_ANALOG_IN, MAX_CURRENT_IN);
+		pots[i] = analogRead(POT_PINS[i]);
+		map(pots[i], MIN_ANALOG_IN, MAX_ANALOG_IN, MIN_ANALOG_IN, MAX_CURRENT_IN);
 	}
 }
 

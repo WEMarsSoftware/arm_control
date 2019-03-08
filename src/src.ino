@@ -11,6 +11,7 @@
 #include "ESPAsyncWebServer.h"
 #include "CommunicationStuff.hh"
 #include "ReadSensors.hh";
+#include "Electrical.hh"
 
 const int ARM_DRIVE_PINS[] = {32, 33, 35, 4, 2, 15};
 const int ARM_DRIVE_CHANNELS[] = {1, 2, 3, 4, 5, 6};
@@ -20,14 +21,14 @@ const int NUM_ARM_MOTORS = 6;
 hw_timer_t * timer = NULL;
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 int lastPingVal = 0;
-const int ZERO_POWER[] = {0, 0, 0, 0, 0, 0};
+int ZERO_POWER[] = {0, 0, 0, 0, 0, 0};
 
 // Stops motors if we lost connection
 void IRAM_ATTR onTimer() {
   portENTER_CRITICAL_ISR(&timerMux);
   
   if (lastPingVal == numPings) {
-    moveMotors(&ZERO_POWER); // TURN MOTORS OFF -> WE LOST CONNECTION
+    moveMotors(ZERO_POWER); // TURN MOTORS OFF -> WE LOST CONNECTION
   }
   lastPingVal = numPings;
   

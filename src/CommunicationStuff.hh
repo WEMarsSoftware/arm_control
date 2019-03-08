@@ -8,6 +8,7 @@
 //#include <FS.h>
 #include "ESPAsyncWebServer.h"
 #include "ReadSensors.hh"
+#include "Electrical.hh"
 
 // INFO FOR LOCAL ROUTER
  char* ssid = "WE MARS Rover";
@@ -15,7 +16,7 @@ const char* password = "westillfirst";
 
 // COMMUNICATION CONSTANTS
 AsyncWebServer server(80);
-IPAddress staticIP(20,20,20,20);
+IPAddress staticIP(192, 168, 1, 18);
 IPAddress gateway(10,10,10,1);
 IPAddress subnet(255,255,255,0);
 const String GET_PARAMS[] = {"motor1", "motor2", "motor3", "motor4", "motor5", "motor6"};
@@ -53,8 +54,7 @@ void inline connectToWiFi()
   Serial.println("CONNECTED TO " + String(ssid));
   Serial.println(WiFi.localIP());
 }
-
-int numParams = request->params();
+int numParams = 6;
 int motorParams[6] = {};
 void inline setupESPServer()
 {
@@ -74,7 +74,7 @@ void inline setupESPServer()
        
       // if all went well, we now have the 6 power percentage values
       // use our Electrical API to move arm motors
-      moveMotors(&motors[0]);
+      moveMotors(&motorParams[0]);
 
       // grab current and potentiometer values 
       getSensorData(&currentSensors[0], &potVals[0]);
@@ -101,7 +101,7 @@ void inline setupESPServer()
   // used to test connection 
   server.on("/hello", HTTP_GET, [](AsyncWebServerRequest *request){ 
         numPings++;
-        
+
        // send hello back
        request->send(200, "text/plain", "Hello!");
    });

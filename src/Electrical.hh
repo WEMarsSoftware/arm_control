@@ -58,14 +58,6 @@ void setDriveChannel(unsigned int motorIndex, int channel) {
  */ 
 void moveMotors(int* percentagePowers){
   // Serial.println("MOVING MOTORS");
-
-  
-	// (value, fromLow, fromHigh, toLow, toHigh)
-	left = map(left, PERCENTAGE_0, PERCENTAGE_100, MIN_PWM_OUT, MAX_PWM_OUT);
-	right = map(right, PERCENTAGE_0, PERCENTAGE_100, MIN_PWM_OUT, MAX_PWM_OUT);
- 
-  // Serial.println(left);
-  // Serial.println(right);
   
 	for (int i = 0; i < NUM_MOTORS; i++) {
     percentagePowers[i] = map(percentagePowers[i], PERCENTAGE_0, PERCENTAGE_100, MIN_PWM_OUT, MAX_PWM_OUT);
