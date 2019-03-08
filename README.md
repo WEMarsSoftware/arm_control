@@ -1,6 +1,10 @@
+# Running
+- IP of the ESP-32 running this is set constant at 192.168.1.18
+- HTTP GET to http://192.168.1.18/?motor1=<#>&motor2=<#>&motor3=<#>&motor4=<#>&motor5=<#>&motor6=<#>
+	- Numbers in parameters are "percentage powers" to apply to motors ranging from -100 to +100
+
 # Using the Arduino environment with the ESP-32 WiFi chips
 Refer to: https://github.com/espressif/arduino-esp32#development-status
-
 
 # Settings used in Arduino IDE
 - Board: DOIT ESP32 DEVKIT V1
