@@ -23,6 +23,8 @@ const String GET_PARAMS[] = {"motor1", "motor2", "motor3", "motor4", "motor5", "
 // TODO: change this
 String response = "{}";
 
+int numPings = 0;
+
 int currentSensors[6] = {};
 int potVals[6] = {};
 
@@ -63,6 +65,7 @@ void inline setupESPServer()
    * ie. a number between -100 and +100 for each motor1 -> motor6 of arm
    */
    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+      numPings++;
 
       for ( int i = 0; i < numParams; i++ ) {
         AsyncWebParameter* p = request->getParam(i);
@@ -97,6 +100,8 @@ void inline setupESPServer()
 
   // used to test connection 
   server.on("/hello", HTTP_GET, [](AsyncWebServerRequest *request){ 
+        numPings++;
+        
        // send hello back
        request->send(200, "text/plain", "Hello!");
    });
